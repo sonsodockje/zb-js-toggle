@@ -75,3 +75,22 @@ function StarRating($container) {
 
 // export default StarRating; // export 방식은 필요에 따라 default 또는 named 선택
 export { StarRating }; // Named export 예시
+
+
+
+// 수정된 주요 로직:
+
+//     maxRating 및 루프: parseInt 보완, 별 개수 및 data-value가 1부터 maxRating까지 올바르게 생성되도록 루프 수정.
+//     starIcons 배열: 별 요소 목록을 한 번만 찾아 배열에 저장 (starIcons). 이벤트 핸들러 안에서 매번 querySelectorAll 안 함.
+//     mouseover: closest('i')로 별 확인, parseInt 추가, forEach와 toggle로 모든 별의 hovered 클래스 관리.
+//     mouseleave: 컨테이너의 dataset.rating에서 현재 선택된 값을 읽어와서, 그 값을 기준으로 hovered 클래스 복원.
+//     click:
+//         closest('i')와 parseInt로 클릭된 값 확인.
+//         dataset.rating에서 현재 값 읽어오기.
+//         newRating 계산 (토글 로직 포함).
+//         dataset.rating 업데이트.
+//         forEach와 toggle로 selected 클래스 업데이트 (한 번의 루프로!).
+//         hovered 클래스도 클릭된 상태와 일치하도록 업데이트.
+//         CustomEvent의 detail에 newRating 전달.
+//     초기 상태 설정: 페이지 로드 시 dataset.rating을 기준으로 초기 별 상태(selected, hovered) 설정.
+//     Export 방식: export { StarRating } (named export)으로 수정함. 만약 app.js에서 import StarRating from ... (default import)를 쓴다면 export default function StarRating...으로 바꿔야 함.
