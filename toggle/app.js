@@ -1,50 +1,37 @@
 // do something!
-const nav = document.querySelector("nav")
-const main = document.querySelector("main")
-const toggleBtn = document.querySelector(".toggle")
+import { saveState, loadState } from "./state.js"
 
-let localState = getState()
+const $nav = document.querySelector("nav"); 
+const $toggleBtn = document.querySelector("i")
 
-firstView()
+let navState = false
+
+window.addEventListener("DOMContentLoaded", () => {
+    const loadLocalState = loadState();
     
-toggleBtn.addEventListener("click", () => {
-    nav.classList.toggle("active")
-    
-    localState = localState === "closed" ? "open" : "closed"
-    localStorage.setItem("toggleState", localState);
-})
-
-// document.addEventListener("DOMContentLoaded", function () {
-//     setTimeout(() => {
-//         document.body.classList.remove("preload");
-//     }, 10)
-
-// });
+    navState = loadLocalState === null ? false : loadLocalState.navState // 현재상태
+    console.log("읽어온 객체" + navState)
 
 
-document.addEventListener("DOMContentLoaded", function () {
+    $nav.classList.toggle("active", navState)
+    document.body.style.visibility = "visible";
+ 
     requestAnimationFrame(() => {
         document.body.classList.remove("preload");
-    });
+    })
 })
 
-function getState() {
-  let localState = localStorage.getItem("toggleState");
+$toggleBtn.addEventListener("click", () => {
+ 
+    navState = !navState
+    $nav.classList.toggle("active", navState)
 
-  if (localState === null) { 
-    localState = "closed";
-    localStorage.setItem("toggleState", localState);
-  }
-    console.log(localState)
-  return localState; 
-}
 
-function firstView() {
-    if (localState === "closed") {
-        nav.classList.remove("active")
-            document.body.style.visibility = "visible";
-    } else {
-        nav.classList.add("active")
-            document.body.style.visibility = "visible";
-    }
-}
+    // 확인 하기 쉽게 일단 여기 넣었습니다. 
+    saveState({ "navState": navState })
+
+})
+
+// window.addEventListener("beforeunload", () => {
+//     saveState({navState})
+// })
